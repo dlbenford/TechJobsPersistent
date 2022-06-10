@@ -1,12 +1,40 @@
-﻿<h1>Add a Job</h1>
+﻿
+@model TechJobsPersistent.ViewModels.AddJobViewModel
+
+<h1>Add a Job</h1>
 
 <form asp-controller="Home" asp-action="ProcessAddJobForm" method="post">
     <div class="form-group">
-        <label>Name</label>
-        <input class="form-control" />
-        <span></span>
+        <label asp-for="Name"></label>
+        <input class="form-control" asp-for="Name"/>
+        <span asp-validation-for="Name"></span>
     </div>
+     <div class="form-group">
+         <!-- Our label and input tags for choosing an Employer when creating a job-->
+        <label asp-for="EmployerId"></label>
+        <!-- What is the dropdown menu HTML form element called?-->
+        <select asp-for= "EmployerId" asp-items="@Model.Employers"></select>
+        <!-- We need a link that takes us to the add employer form-->
+        <a asp-controller="Employer" asp-action="Add">Click here to Add Employer</a>
+         <input type="submit" value="Add Job" />
+        <span asp-validation-for="EmployerId"></span>
+     </div>
+     <div> class="form-group"
+         <!-- Loop through each skill in our list of Skill objects -->
+         <!-- How do we access ouir list of Skills here in the view?-->
+         <!-- foreach skill in our list of all skiill in the view model-->
+        @if (Model.Skills != null)
+        {
+            @foreach (var skill in Model.Skills)
 
-    <input type="submit" value="Add Job" />
+
+            {
+                <label>@skill.Name for="skill.Id"</label>
+                <input type="checkbox" name="selectedSkills" value="skill.Id" />
+            }
+
+        }
+        <a asp-controller="Skill" asp-action="Add">Click here to Add Skills</a>
+     </div>
 </form>
 

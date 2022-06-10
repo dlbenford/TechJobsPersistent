@@ -1,6 +1,11 @@
 --Part 1
-
+-- Id int
+--Name longtext
+--EmployerID int
 --Part 2
-
+--SELECT Name FROM Employer WHERE Location = "St. Louis City"
 --Part 3
+--SELECT * FROM Skills
+--LEFT JOIN JobSkills ON Skill.Id = JobSkills.SkillId
+--ORDER BY Name ASC:
 

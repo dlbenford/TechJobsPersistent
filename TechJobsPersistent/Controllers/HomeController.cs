@@ -32,12 +32,43 @@ namespace TechJobsPersistent.Controllers
         [HttpGet("/Add")]
         public IActionResult AddJob()
         {
-            return View();
+            //create an instance of the AddJobViewModel and pass it to the view
+            //When we create this instance of AddJobViewModel, this is when we can
+            //get a list of all the employers from the database and pass it into 
+            //the AddJobViewModel instance!
+            //We need to also get a list of all the skills from the database and pass that to the 
+            //instance of AddJobViewModel just like we did with employers
+            //Therefore the AddJob view will be able to display all the employers and all of the skills
+            AddJobViewModel addJobViewModel = new AddJobViewModel(/*will have to add something here*/);
+            return View(addJobViewModel);
+
         }
 
-        public IActionResult ProcessAddJobForm()
+        public IActionResult ProcessAddJobForm(AddJobViewModel addJobViewModel, string[] selectedSkills)
         {
-            return View();
+            if (ModelState.IsValid) { 
+                Job newJob = new Job
+            {
+                Name = addJobViewModel.Name,
+                EmployerId = addJobViewModel.EmployerId,
+                Employer = context.Employers.Find(addJobViewModel.EmployerId)
+            };
+            for (int i = 0; i < selectedSkills.Length; i++)
+            {
+                JobSkill newjobSkill = new JobSkill
+                {
+                    JobId = newJob.Id,
+                    Job = newJob,
+                    SkillId = Int32.Parse(selectedSkills[i]),
+                };
+                context.JobSkills.Add(newjobSkill);
+            }
+                context.Jobs.Add(newJob);
+                context.SaveChanges();
+                return Redirect("Index"); 
+            }
+            return View("Add",addJobViewModel);
+
         }
 
         public IActionResult Detail(int id)
